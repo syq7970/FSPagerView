@@ -555,6 +555,17 @@ open class FSPagerView: UIView,UICollectionViewDataSource,UICollectionViewDelega
         let indexPath = self.nearbyIndexPath(for: index)
         return self.collectionView.cellForItem(at: indexPath) as? FSPagerViewCell
     }
+
+    @objc
+    open func insertItems(at indexPaths: [IndexPath]) {
+        self.collectionViewLayout.needsReprepare = true
+        UIView.setAnimationsEnabled(false);
+        self.collectionView.performBatchUpdates({
+            self.collectionView.insertItems(at: indexPaths)
+        }, completion: { _ in
+            UIView.setAnimationsEnabled(true);
+        });
+    }
     
     // MARK: - Private functions
     
