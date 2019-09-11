@@ -339,7 +339,6 @@ open class FSPagerView: UIView,UICollectionViewDataSource,UICollectionViewDelega
     }
 
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        print("Prefetch: \(indexPaths)")
         self.dataSource!.pagerView(self, prefetchItemsAt: indexPaths);
     }
 
