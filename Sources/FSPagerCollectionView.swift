@@ -52,7 +52,7 @@ class FSPagerCollectionView: UICollectionView {
         self.showsVerticalScrollIndicator = false
         self.showsHorizontalScrollIndicator = false
         if #available(iOS 10.0, *) {
-            self.isPrefetchingEnabled = false
+            self.isPrefetchingEnabled = true
         }
         if #available(iOS 11.0, *) {
             self.contentInsetAdjustmentBehavior = .never

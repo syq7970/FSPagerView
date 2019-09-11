@@ -22,7 +22,9 @@ public protocol FSPagerViewDataSource: NSObjectProtocol {
     /// Asks your data source object for the cell that corresponds to the specified item in the pager view.
     @objc(pagerView:cellForItemAtIndex:)
     func pagerView(_ pagerView: FSPagerView, cellForItemAt index: Int) -> FSPagerViewCell
-    
+
+    @objc(pagerView:prefetchItemsAtIndexPaths:)
+    func pagerView(_ pagerView: FSPagerView, prefetchItemsAt indexPaths: [IndexPath])
 }
 
 @objc
@@ -75,7 +77,7 @@ public protocol FSPagerViewDelegate: NSObjectProtocol {
 }
 
 @IBDesignable
-open class FSPagerView: UIView,UICollectionViewDataSource,UICollectionViewDelegate {
+open class FSPagerView: UIView,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDataSourcePrefetching {
     
     // MARK: - Public properties
 
@@ -335,6 +337,12 @@ open class FSPagerView: UIView,UICollectionViewDataSource,UICollectionViewDelega
         let cell = self.dataSource!.pagerView(self, cellForItemAt: index)
         return cell
     }
+
+    public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        print("Prefetch: \(indexPaths)")
+        self.dataSource!.pagerView(self, prefetchItemsAt: indexPaths);
+    }
+
     
     // MARK: - UICollectionViewDelegate
     
@@ -564,6 +572,9 @@ open class FSPagerView: UIView,UICollectionViewDataSource,UICollectionViewDelega
         let collectionView = FSPagerCollectionView(frame: CGRect.zero, collectionViewLayout: collectionViewLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
+        if #available(iOS 10.0, *) {
+            collectionView.prefetchDataSource = self
+        }
         collectionView.backgroundColor = UIColor.clear
         self.contentView.addSubview(collectionView)
         self.collectionView = collectionView
